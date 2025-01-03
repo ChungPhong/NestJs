@@ -5,7 +5,7 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User {
-  @Prop({required: true}) //thuộc tính
+  @Prop({required: true}) //Prop thuộc tính
   email: string;
 
   @Prop({required: true})
