@@ -19,6 +19,7 @@ export class UsersService {
     return hash;
   };
 
+  //Tạo mới
   async create(createUserDto: CreateUserDto) {
     const hashPassword = this.getHashPassword(createUserDto.password);
     let user = await this.userModel.create({
@@ -33,15 +34,21 @@ export class UsersService {
     return `This action returns all users`;
   }
 
+  //Tìm user
   findOne(id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) return `not found user`;
     return this.userModel.findOne({
       _id: id,
     });
   }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  // Cập nhật
+  async update(updateUserDto: UpdateUserDto) {
+    return await this.userModel.updateOne(
+      {
+        _id: updateUserDto._id,
+      },
+      { ...updateUserDto },
+    );
   }
 
   remove(id: number) {
