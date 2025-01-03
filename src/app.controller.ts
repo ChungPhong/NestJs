@@ -21,18 +21,22 @@ export class AppController {
     private authService: AuthService,
   ) {}
 
-  @UseGuards(LocalAuthGuard) //middleware người dùng phải gửi đúng username và password
+  @UseGuards(LocalAuthGuard) // người dùng phải gửi đúng username và password
   @Post('/login')
   handleLogin(@Request() req) {
     return this.authService.login(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard) // phải gửi kèm theo accesstoken
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
   }
-
+  // @UseGuards(JwtAuthGuard) // phải gửi kèm theo accesstoken
+  @Get('profile1')
+  getProfile1(@Request() req) {
+    return req.user;
+  }
   // @Get()
   // @Render('home')
   // handleHomePage() {
