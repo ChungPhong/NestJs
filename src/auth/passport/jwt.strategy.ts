@@ -18,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   //Giải mã
   async validate(payload: IUser) {
     const { _id, name, email, role } = payload;
-    console.log('giải mã: ', _id, name, email, role);
+
 
     //req.user
     return {
