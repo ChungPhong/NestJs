@@ -3,12 +3,12 @@ import { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class User {
-  @Prop({required: true}) //Prop thuộc tính
+  @Prop({ required: true }) //Prop thuộc tính
   email: string;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   password: string;
 
   @Prop()

@@ -6,6 +6,7 @@ import mongoose, { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
 import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 
+
 @Injectable()
 export class UsersService {
   constructor(
