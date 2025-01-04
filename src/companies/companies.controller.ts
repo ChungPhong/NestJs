@@ -8,8 +8,8 @@ export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
   @Post()
-  create(@Body() createCompanyDto: CreateCompanyDto) {
-    return this.companiesService.create(createCompanyDto);
+  create(@Body() createCompanyDto: CreateCompanyDto) { //thông qua DTO để validate dữ liệu
+    return this.companiesService.create(createCompanyDto); //rồi truyền sang phần service
   }
 
   @Get()

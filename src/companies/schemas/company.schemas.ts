@@ -26,7 +26,7 @@ export class Company {
     email: string;
   };
 
-  @Prop()
+  @Prop({ type: Object })
   deleteddBy: {
     _id: mongoose.Schema.Types.ObjectId;
     email: string;
