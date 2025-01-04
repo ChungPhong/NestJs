@@ -22,25 +22,6 @@ export class AppController {
     private authService: AuthService,
   ) {}
 
-  @Public() //Không muốn check JWT thì dùng Public
-  @UseGuards(LocalAuthGuard) // người dùng phải gửi đúng username và password
-  @Post('/login')
-  handleLogin(@Request() req) {
-    return this.authService.login(req.user);
-  }
-
-  // @UseGuards(JwtAuthGuard) // phải gửi kèm theo accesstoken
-  // @Public()
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
-
-  // @UseGuards(JwtAuthGuard) // phải gửi kèm theo accesstoken
-  @Get('profile1')
-  getProfile1(@Request() req) {
-    return req.user;
-  }
   // @Get()
   // @Render('home')
   // handleHomePage() {
