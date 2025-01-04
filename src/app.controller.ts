@@ -12,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { Public } from './decorator/customize';
 
 @Controller()
 export class AppController {
@@ -21,6 +22,7 @@ export class AppController {
     private authService: AuthService,
   ) {}
 
+  @Public() //Không muốn check JWT thì dùng Public
   @UseGuards(LocalAuthGuard) // người dùng phải gửi đúng username và password
   @Post('/login')
   handleLogin(@Request() req) {
@@ -28,10 +30,12 @@ export class AppController {
   }
 
   // @UseGuards(JwtAuthGuard) // phải gửi kèm theo accesstoken
+  // @Public()
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
   }
+
   // @UseGuards(JwtAuthGuard) // phải gửi kèm theo accesstoken
   @Get('profile1')
   getProfile1(@Request() req) {
