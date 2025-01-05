@@ -35,26 +35,24 @@ export class CompaniesService {
     const totalItems = (await this.companyModel.find(filter)).length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
-    const result = await this.companyModel.find(filter)
-    .skip(offset)
-    .limit(defaultLimit)
-    // @ts-ignore: Unreachable code error
-    .sort(sort)
-    .populate(population)
-    .exec();
+    const result = await this.companyModel
+      .find(filter)
+      .skip(offset)
+      .limit(defaultLimit)
+      // @ts-ignore: Unreachable code error
+      .sort(sort)
+      .populate(population)
+      .exec();
 
-return {
-    meta: {
+    return {
+      meta: {
         current: currentPage, // trang hiện tại
         pageSize: limit, // số lượng bản ghi đã lấy
         pages: totalPages, // tổng số trang với điều kiện query
-        total: totalItems // tổng số phần tử (số bản ghi)
-    },
-    result // kết quả query
-};
-
-
-
+        total: totalItems, // tổng số phần tử (số bản ghi)
+      },
+      result, // kết quả query
+    };
   }
 
   findOne(id: number) {
