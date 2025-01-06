@@ -28,6 +28,19 @@ export class UsersController {
     };
   }
 
+  //Cập nhật User
+  @ResponseMessage('Update a User')
+  @Patch()
+  async update(@Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
+    let updatedUser = await this.usersService.update(updateUserDto, user);
+    return updatedUser;
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
+  }
+
   @Get()
   findAll() {
     return this.usersService.findAll();
@@ -39,18 +52,5 @@ export class UsersController {
     id: string,
   ) {
     return this.usersService.findOne(id);
-  }
-
-  @Patch()
-  update(
-    @Body()
-    updateUserDto: UpdateUserDto,
-  ) {
-    return this.usersService.update(updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
   }
 }

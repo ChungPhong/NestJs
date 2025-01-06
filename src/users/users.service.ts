@@ -44,8 +44,8 @@ export class UsersService {
       role,
       company,
       createdBy: {
-        _id: user?._id,
-        createdAt: user?.createdAt,
+        _id: user._id,
+        email: user.email,
       },
     });
     return newUser;
@@ -74,6 +74,23 @@ export class UsersService {
     return newRegister;
   }
 
+  // Cập nhật
+  async update(updateUserDto: UpdateUserDto, user: IUser) {
+    const updated = await this.userModel.updateOne(
+      {
+        _id: updateUserDto._id,
+      },
+      {
+        ...updateUserDto,
+        updatedBy: {
+          _id: user._id,
+          email: user.email,
+        },
+      },
+    );
+    return updated;
+  }
+
   //Check user password
   isValidPassword(password: string, hash: string) {
     return compareSync(password, hash);
@@ -96,16 +113,6 @@ export class UsersService {
     return this.userModel.findOne({
       email: username,
     });
-  }
-
-  // Cập nhật
-  async update(updateUserDto: UpdateUserDto) {
-    return await this.userModel.updateOne(
-      {
-        _id: updateUserDto._id,
-      },
-      { ...updateUserDto },
-    );
   }
 
   remove(id: string) {
