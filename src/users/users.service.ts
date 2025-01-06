@@ -163,4 +163,15 @@ export class UsersService {
       result, // kết quả query
     };
   }
+
+  updateUserToken = async (refreshToken: string, _id: string) => {
+    await this.userModel.updateOne(
+      {
+        _id,
+      },
+      {
+        refreshToken,
+      },
+    );
+  };
 }

@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/users/users.interface';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 import ms from 'ms';
 @Injectable()
 export class AuthService {
@@ -25,7 +26,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: IUser) {
+  async login(user: IUser, response: Response) {
     const { _id, name, email, role } = user;
     const payload = {
       sub: 'token login', //Nội dung token
@@ -36,10 +37,18 @@ export class AuthService {
       role,
     };
     const refresh_token = this.createRefreshToken(payload);
+    //update user with refresh token vao database
+    await this.usersService.updateUserToken(refresh_token, _id);
+
+    //set refresh_token as cookie
+    response.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      maxAge: ms(this.configService.get<string>('JWT_ACCESS_EXPIRED')),
+    });
+
     //Tạo ra token
     return {
       access_token: this.jwtService.sign(payload),
-      refresh_token,
       user: {
         _id,
         name,
@@ -49,16 +58,15 @@ export class AuthService {
     };
   }
 
-//TẠO MỚI REFRESH TOKEN
-createRefreshToken = (payload: any) => {
-  const refresh_token = this.jwtService.sign(payload, {
-    secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
-    expiresIn:
-      ms(this.configService.get<string>('JWT_REFRESH_EXPIRED')) / 1000,
-  });
-  return refresh_token;
-};
-
+  //TẠO MỚI REFRESH TOKEN
+  createRefreshToken = (payload: any) => {
+    const refresh_token = this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn:
+        ms(this.configService.get<string>('JWT_REFRESH_EXPIRED')) / 1000,
+    });
+    return refresh_token;
+  };
 
   async register(user: RegisterUserDto) {
     let newUser = await this.usersService.register(user);
@@ -68,6 +76,4 @@ createRefreshToken = (payload: any) => {
       createdAt: newUser.createdAt,
     };
   }
-
-  
 }
