@@ -43,7 +43,7 @@ export class AuthService {
     //set refresh_token as cookie
     response.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      maxAge: ms(this.configService.get<string>('JWT_ACCESS_EXPIRED')) * 1000,
+      maxAge: ms(this.configService.get<string>('JWT_ACCESS_EXPIRED')),
     });
 
     //Tạo ra token
@@ -77,11 +77,46 @@ export class AuthService {
     };
   }
 
-  processNewToken = (refreshToken: string) => {
+  processNewToken = async (refreshToken: string, response: Response) => {
     try {
       this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
       });
+      let user = await this.usersService.findUserByToken(refreshToken);
+      if (user) {
+        const { _id, name, email, role } = user;
+        const payload = {
+          sub: 'token refresh', //Nội dung token
+          iss: 'from server', //Người tạo ra token
+          _id,
+          name,
+          email,
+          role,
+        };
+        const refresh_token = this.createRefreshToken(payload);
+        //update user with refresh token vao database
+        await this.usersService.updateUserToken(refresh_token, _id.toString());
+
+        //set refresh_token as cookie
+        response.clearCookie('refresh_token');
+        response.cookie('refresh_token', refresh_token, {
+          httpOnly: true,
+          maxAge: ms(this.configService.get<string>('JWT_ACCESS_EXPIRED')),
+        });
+        return {
+          access_token: this.jwtService.sign(payload),
+          user: {
+            _id,
+            name,
+            email,
+            role,
+          },
+        };
+      } else {
+        throw new BadRequestException(
+          `Refresh token không hợp lệ. Vui lòng login.`,
+        );
+      }
     } catch (error) {
       throw new BadRequestException(
         `Refresh token không hợp lệ. Vui lòng login.`,
