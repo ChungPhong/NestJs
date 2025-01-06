@@ -19,6 +19,7 @@ export class AuthController {
   @Public() //Không muốn check JWT thì dùng Public
   @UseGuards(LocalAuthGuard) // người dùng phải gửi đúng username và password
   @Post('/login')
+  @ResponseMessage('User Login')
   handleLogin(@Request() req) {
     return this.authService.login(req.user);
   }
