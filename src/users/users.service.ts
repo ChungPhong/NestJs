@@ -21,6 +21,10 @@ export class UsersService {
     const hash = hashSync(password, salt);
     return hash;
   };
+  //Check user password
+  isValidPassword(password: string, hash: string) {
+    return compareSync(password, hash);
+  }
 
   //Tạo mới
   async create(createUserDto: CreateUserDto, @User() user: IUser) {
@@ -91,34 +95,44 @@ export class UsersService {
     return updated;
   }
 
-  //Check user password
-  isValidPassword(password: string, hash: string) {
-    return compareSync(password, hash);
+  //Xoa User
+  async remove(id: string, user: IUser) {
+    if (!mongoose.Types.ObjectId.isValid(id)) return `not found user`;
+
+    await this.userModel.updateOne(
+      {
+        _id: id,
+      },
+      {
+        deletedBy: {
+          _id: user._id,
+          email: user.email,
+        },
+      },
+    );
+    return this.userModel.softDelete({
+      _id: id,
+    });
+  }
+
+  //Tìm user
+  async findOne(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id)) return `not not user`;
+    return await this.userModel
+      .findOne({
+        _id: id,
+      })
+      .select('-password');
   }
 
   findAll() {
     return `This action returns all users`;
   }
 
-  //Tìm user
-  findOne(id: string) {
-    if (!mongoose.Types.ObjectId.isValid(id)) return `not found user`;
-    return this.userModel.findOne({
-      _id: id,
-    });
-  }
-
   //
   findOneByUserName(username: string) {
     return this.userModel.findOne({
       email: username,
-    });
-  }
-
-  remove(id: string) {
-    if (!mongoose.Types.ObjectId.isValid(id)) return `not found user`;
-    return this.userModel.softDelete({
-      _id: id,
     });
   }
 }

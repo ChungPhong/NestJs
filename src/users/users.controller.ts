@@ -36,21 +36,24 @@ export class UsersController {
     return updatedUser;
   }
 
+  //Xóa User
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  @ResponseMessage('Delete a User')
+  remove(@Param('id') id: string, @User() user: IUser) {
+    return this.usersService.remove(id, user);
+  }
+
+  //Fetch User by ID
+  @Public()
+  @Get(':id')
+  @ResponseMessage('Fetch user by id')
+  async findOne(@Param('id') id: string) {
+    const foundUser = await this.usersService.findOne(id);
+    return foundUser;
   }
 
   @Get()
   findAll() {
     return this.usersService.findAll();
-  }
-
-  @Get(':id')
-  findOne(
-    @Param('id')
-    id: string,
-  ) {
-    return this.usersService.findOne(id);
   }
 }
