@@ -26,10 +26,12 @@ async function bootstrap() {
 
   //config cors
   app.enableCors({
-    origin: '*', // cho phep bat ki noi nao co the goi den
+    // origin: "*", // cho phep bat ki noi nao co the goi den
+    origin: true, //chỉ cần (domain) cho phép kết nối từ bất cừ nơi đâu, ví dụ: localhost => localhost
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
+    credentials: true, //cho phép client và server trao đổi
   });
 
   //config cookies
