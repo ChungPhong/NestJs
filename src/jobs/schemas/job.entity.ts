@@ -9,7 +9,7 @@ export class Job {
   name: string;
 
   @Prop() //Prop thuộc tính
-  skills: string;
+  skills: string[];
 
   @Prop({ type: Object })
   company: {
