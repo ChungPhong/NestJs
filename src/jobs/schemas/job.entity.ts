@@ -61,10 +61,10 @@ export class Job {
   };
 
   @Prop()
-  createdAt: string;
+  createdAt: Date;
 
   @Prop()
-  updateAt: string;
+  updateAt: Date;
 
   // 2 trường cuối là dành cho soft delete
   @Prop()

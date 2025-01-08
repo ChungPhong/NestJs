@@ -36,10 +36,10 @@ export class Company {
   };
 
   @Prop()
-  createdAt: string;
+  createdAt: Date;
 
   @Prop()
-  updateAt: string;
+  updateAt: Date;
 
   @Prop()
   isDeleted: boolean;
