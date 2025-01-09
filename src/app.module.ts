@@ -14,6 +14,8 @@ import { FilesModule } from './files/files.module';
 import { ResumesModule } from './resumes/resumes.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
+import { DatabasesModule } from './databases/databases.module';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { RolesModule } from './roles/roles.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_URL'),
-        
+
         connectionFactory: (connection) => {
           connection.plugin(softDeletePlugin);
           return connection;
@@ -40,10 +42,12 @@ import { RolesModule } from './roles/roles.module';
     ResumesModule,
     PermissionsModule,
     RolesModule,
+    DatabasesModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+
     // {
     //   provide: APP_GUARD,
     //   useClass: JwtAuthGuard,
