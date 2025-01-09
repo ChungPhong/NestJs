@@ -99,7 +99,10 @@ export class UsersService {
   //Xoa User
   async remove(id: string, user: IUser) {
     if (!mongoose.Types.ObjectId.isValid(id)) return `not found user`;
-
+    const foundUser = await this.userModel.findById(id);
+    if (foundUser.email === 'admin@gmail.com') {
+      throw new BadRequestException('Không thể xóa tài khoản admin@gmail.com');
+    }
     await this.userModel.updateOne(
       {
         _id: id,
@@ -123,14 +126,17 @@ export class UsersService {
       .findOne({
         _id: id,
       })
-      .select('-password');
+      .select('-password')
+      .populate({ path: 'role', select: { name: 1, _id: 1 } });
   }
 
   //Fetch User with paginate
   findOneByUserName(username: string) {
-    return this.userModel.findOne({
-      email: username,
-    });
+    return this.userModel
+      .findOne({
+        email: username,
+      })
+      .populate({ path: 'role', select: { name: 1, permission: 1 } });
   }
 
   async findAll(currentPage: number, limit: number, qs: string) {
