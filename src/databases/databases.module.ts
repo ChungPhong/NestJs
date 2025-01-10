@@ -8,14 +8,14 @@ import {
   PermissionSchema,
 } from 'src/permissions/schemas/permission.entity';
 import { Role, RoleSchema } from 'src/roles/schemas/role.entity';
-import { UsersModule } from 'src/users/users.module';
+
+import { UsersService } from 'src/users/users.service';
 
 @Module({
   controllers: [DatabasesController],
-  providers: [DatabasesService],
+  providers: [DatabasesService, UsersService],
 
   imports: [
-    UsersModule,
     MongooseModule.forFeature([
       {
         name: User.name,
