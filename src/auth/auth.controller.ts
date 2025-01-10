@@ -14,6 +14,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { Request, Response } from 'express';
 import { IUser } from 'src/users/users.interface';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('auth') // route
 export class AuthController {
@@ -24,6 +25,7 @@ export class AuthController {
 
   @Public() //Không muốn check JWT thì dùng Public
   @UseGuards(LocalAuthGuard) // người dùng phải gửi đúng username và password
+  @UseGuards(ThrottlerGuard) //Rate limiting
   @Post('/login')
   @ResponseMessage('User Login')
   handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
@@ -41,7 +43,7 @@ export class AuthController {
   @ResponseMessage('Get user information')
   @Get('/account')
   async handleGetAccount(@User() user: IUser) {
-    const temp = await this.rolesService.findOne(user.role._id) as any;
+    const temp = (await this.rolesService.findOne(user.role._id)) as any;
     user.permissions = temp.permissions;
     return { user };
   }
