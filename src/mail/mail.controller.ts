@@ -7,7 +7,7 @@ import { SubscriberDocument } from 'src/subscribers/schemas/subscriber.schema';
 import { Job, JobDocument } from 'src/jobs/schemas/job.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Subscriber } from 'rxjs';
-
+import { Cron, CronExpression } from '@nestjs/schedule';
 @Controller('mail')
 export class MailController {
   constructor(
@@ -20,9 +20,15 @@ export class MailController {
     private jobModel: SoftDeleteModel<JobDocument>,
   ) {}
 
+  // @Cron(CronExpression.EVERY_30_SECONDS)
+  // testCorn() {
+  //   console.log('>>>>>call me');
+  // }
+
   @Get()
   @Public()
   @ResponseMessage('Test email')
+  @Cron('0 10 0 * * 0') // 0.10 am every sunday, nếu muốn nó chạy thì qua file .env sửa EMAIL_PREVIEW=true
   async handleTestEmail() {
     const subscribers = await this.subscriberModel.find({});
     for (const subs of subscribers) {

@@ -22,7 +22,11 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views')); //views
   app.setViewEngine('ejs');
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, //khi update sẽ kh bị mất dữ liệu
+    }),
+  );
 
   //config cors
   app.enableCors({
