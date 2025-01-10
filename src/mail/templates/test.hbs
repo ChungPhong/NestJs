@@ -1,0 +1,87 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Document</title>
+  </head>
+  <body
+    style='font-family: Arial, sans-serif; margin: 0; padding: 40px; background-color: #ddd; max-width: 600px;'
+  >
+
+    <!-- Khối “nền xám” ở giữa -->
+    <div
+      style='
+       max-width: 600px;
+       margin: 0 auto; /* Căn giữa theo chiều ngang */
+        background-color: #fff;
+       border-radius: 8px;
+       padding: 20px;
+       border: 1px solid #ddd;
+  '
+    >
+      <!-- Thanh tiêu đề trên cùng -->
+      <div
+        style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;'
+      >
+        <h1 style='margin: 0; font-size: 24px;'>IT Việc</h1>
+      </div>
+      <hr />
+      <!-- Dòng chào, tên người nhận và lời giới thiệu -->
+      <p style='margin: 0; font-size: 16px;'>
+        Hi
+        {{receiver}},
+      </p>
+      <p style='margin: 15px 0; font-size: 16px;'>
+        One of these jobs may be your next one. Find out today!
+      </p>
+
+      <!-- Thẻ chứa thông tin job (nền trắng bên trong khối xám) -->
+      {{#each jobs}}
+        <div
+          style='
+         border: 1px solid #ccc;
+         padding: 15px;
+         margin-bottom: 20px;
+         border-radius: 4px;
+    '
+        >
+          <h2 style='font-size: 18px; margin: 0 0 10px; font-weight: bold;'>
+            {{name}}
+          </h2>
+          <p style='margin: 0; font-size: 14px;'>
+            <strong>{{company}}</strong>
+          </p>
+          <p style='margin: 5px 0; font-size: 14px; font-weight: bold;'>
+            {{salary}}
+          </p>
+          {{#each skills}}
+            <span style='margin: 5px 0; font-size: 14px;'>
+              {{this}}
+            </span>
+          {{/each}}
+        </div>
+      {{/each}}
+      <!-- Nút xem thêm -->
+      <a
+        href='#'
+        style='display: inline-block; 
+              padding: 10px 20px; 
+              background-color: #d9534f; 
+              color: #fff; 
+              text-decoration: none; 
+              font-size: 14px; 
+              border-radius: 4px;'
+      >
+        Xem thêm job tại đây
+      </a>
+
+      <!-- Lời chào cuối -->
+      <p style='margin-top: 20px; font-size: 14px;'>
+        Cheers,<br />
+        Eric
+      </p>
+    </div>
+    <!-- Kết thúc khối “nền xám” -->
+
+  </body>
+</html>
