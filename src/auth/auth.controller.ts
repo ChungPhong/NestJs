@@ -11,11 +11,13 @@ import {
 import { AuthService } from './auth.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { LocalAuthGuard } from './local-auth.guard';
-import { RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { RegisterUserDto, UserLoginDto } from 'src/users/dto/create-user.dto';
 import { Request, Response } from 'express';
 import { IUser } from 'src/users/users.interface';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth') //Operations Swagger
 @Controller('auth') // route
 export class AuthController {
   constructor(
@@ -26,6 +28,7 @@ export class AuthController {
   @Public() //Không muốn check JWT thì dùng Public
   @UseGuards(LocalAuthGuard) // người dùng phải gửi đúng username và password
   @UseGuards(ThrottlerGuard) //Rate limiting
+  @ApiBody({ type: UserLoginDto })
   @Post('/login')
   @ResponseMessage('User Login')
   handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
